@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =====================
+   LIGHT BLUE HEALTHCARE THEME
+   ===================== */
+
+body {
+  background: #f5f9fc; /* soft light blue white */
+  color: #2a2f3a;
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* clean container */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 24px;
+}
+
+/* titles */
+.h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #103b73; /* deep medical blue */
+}
+.h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #134b8a;
+}
+.text-soft {
+  color: #6c7b8a;
+}
+
+/* upload dropzone */
+.dropzone {
+  background: white;
+  border: 2px dashed #c3d4e9;
+  border-radius: 18px;
+  padding: 40px;
+  text-align: center;
+  transition: 0.2s;
+}
+.dropzone:hover {
+  border-color: #498ded;
+  background: #f0f6ff;
+}
+
+/* file item */
+.file-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* card */
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px 26px;
+  border: 1px solid #e6edf5;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+}
+
+/* primary button */
+.btn {
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+/* navbar */
+.navbar {
+  background: white;
+  padding: 16px 32px;
+  border-bottom: 1px solid #e6ecf3;
+}
+.nav-item {
+  color: #134b8a;
+}
+.nav-item:hover {
+  color: #2563eb;
+}
+
+/* Improve hover smoothness */
+* {
+  transition: all 0.15s ease;
+}
+
+/* Add hover shadow for upload card */
+.bg-white:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+}
+
+/* Cleaner button look */
+.btn-primary {
+  background: linear-gradient(90deg, #3b82f6, #2978f2);
+  color: white;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+}
+
+header {
+  backdrop-filter: blur(8px);
+}
+
+header a {
+  transition: color 0.15s ease;
+}
