@@ -100,7 +100,7 @@ export default function UploadPage() {
                 fd.append("file", file);
 
                 // call server route that does presign + PUT to S3 (server-side)
-                const uploadRes = await fetch("/api/opus/upload", {
+                const uploadRes = await fetch("/api/opus/upload-url", {
                   method: "POST",
                   body: fd,
                 });
