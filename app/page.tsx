@@ -72,7 +72,7 @@ export default function UploadPage() {
 
         {/* Start Button */}
         <button
-          className="btn btn-primary w-full text-lg mt-8 py-4 rounded-xl shadow-sm"
+          className="btn btn-primary w-full text-lg mt-8 py-4 rounded-xl shadow-sm cursor-pointer"
           onClick={async () => {
             if (files.length === 0)
               return alert("Please upload at least one file!");
