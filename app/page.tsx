@@ -15,7 +15,6 @@ export default function UploadPage() {
 
   return (
     <div className="max-w-3xl mx-auto mt-12 space-y-10">
-
       {/* Title Section */}
       <div className="text-center space-y-3">
         <h1 className="text-4xl font-bold text-[#103b73]">
@@ -28,8 +27,6 @@ export default function UploadPage() {
 
       {/* Upload Box Wrapper */}
       <div className="bg-white rounded-2xl border border-[#e6edf5] shadow-sm p-10">
-
-        {/* Dropzone */}
         <div
           className="dropzone cursor-pointer h-56 flex flex-col justify-center"
           onClick={() => fileRef.current?.click()}
@@ -55,10 +52,7 @@ export default function UploadPage() {
         {/* File List */}
         <div className="mt-6 space-y-3">
           {files.map((f, i) => (
-            <div
-              key={i}
-              className="file-item flex items-center justify-between"
-            >
+            <div key={i} className="file-item flex items-center justify-between">
               <div className="flex items-center gap-3 text-soft">
                 <File className="w-5" />
                 <span className="font-medium">{f.name}</span>
@@ -79,7 +73,65 @@ export default function UploadPage() {
         {/* Start Button */}
         <button
           className="btn btn-primary w-full text-lg mt-8 py-4 rounded-xl shadow-sm"
-          onClick={() => router.push("/processing")}
+          onClick={async () => {
+            if (files.length === 0)
+              return alert("Please upload at least one file!");
+
+            /** ------------------------------------
+             * 1. INITIATE JOB
+             * -----------------------------------**/
+            const initRes = await fetch("/api/opus/initiate", {
+              method: "POST",
+            });
+            const { jobExecutionId } = await initRes.json();
+            console.log("Job Initiated:", jobExecutionId);
+
+            const uploadedFileUrls: string[] = [];
+
+            /** ------------------------------------
+             * 2. UPLOAD EACH FILE TO OPUS S3
+             * -----------------------------------**/
+            for (const file of files) {
+              const urlRes = await fetch("/api/opus/upload-url", {
+                method: "POST",
+              });
+
+              const data = await urlRes.json();
+              console.log("UPLOAD URL RESPONSE:", data);
+
+              const presignedUrl = data.presignedUrl;
+              const fileUrl = data.fileUrl; // store this for execute
+
+              // Upload file to S3 bucket
+              await fetch(presignedUrl, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": file.type || "application/octet-stream",
+                },
+                body: file,
+              });
+
+              uploadedFileUrls.push(fileUrl);
+            }
+
+            /** ------------------------------------
+             * 3. EXECUTE WORKFLOW WITH fileUrls
+             * -----------------------------------**/
+            await fetch("/api/opus/execute", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                jobExecutionId,
+                fileUrls: uploadedFileUrls,
+              }),
+            });
+
+            /** ------------------------------------
+             * 4. SAVE job ID → go to processing
+             * -----------------------------------**/
+            localStorage.setItem("opus_job_id", jobExecutionId);
+            router.push("/processing");
+          }}
         >
           Start Analysis →
         </button>
